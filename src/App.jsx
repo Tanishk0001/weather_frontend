@@ -14,8 +14,9 @@ export default function App() {
     if (!city) return;
     setLoading(true);
     try {
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://weather-backend-3-tlkd.onrender.com';
       const res = await axios.get(
-        `https://weather-backend-vd2p.onrender.com/api/weather?city=${city}`,
+        `${API_BASE_URL}/api/weather?city=${city}`,
         { timeout: 10000 } // 10 second timeout
       );
       setWeather(res.data);

@@ -14,7 +14,7 @@ A beautiful, responsive React weather application with dynamic backgrounds and r
 ## 🚀 Live Demo
 
 - **Frontend**: [Deploy URL will be here]
-- **Backend API**: https://weather-backend-vd2p.onrender.com
+- **Backend API**: https://weather-backend-3-tlkd.onrender.com
 
 ## 🛠️ Tech Stack
 
@@ -56,7 +56,7 @@ A beautiful, responsive React weather application with dynamic backgrounds and r
 
 The app connects to the backend API at:
 ```
-https://weather-backend-vd2p.onrender.com/api/weather?city={cityName}
+https://weather-backend-3-tlkd.onrender.com/api/weather?city={cityName}
 ```
 
 ## 📦 Deployment
