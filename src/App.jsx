@@ -14,46 +14,35 @@ export default function App() {
     if (!city) return;
     setLoading(true);
     try {
-      const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://weather-backend-3-tlkd.onrender.com';
+      // Use local proxy server in development, or Render URL in production
+      const API_BASE_URL = process.env.NODE_ENV === 'development' 
+        ? 'http://localhost:3001' 
+        : 'https://weather-backend-3-tlkd.onrender.com';
       
-      // First, try to wake up the server with a health check
-      if (retryCount === 0) {
-        try {
-          await axios.get(`${API_BASE_URL}/actuator/health`, { timeout: 5000 });
-        } catch (healthError) {
-          console.log('Health check failed, server might be sleeping');
+      const response = await axios.get(`${API_BASE_URL}/api/weather?city=${encodeURIComponent(city)}`, {
+        timeout: 10000,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         }
-      }
+      });
       
-      const res = await axios.get(
-        `${API_BASE_URL}/api/weather?city=${city}`,
-        { timeout: 30000 } // 30 second timeout for cold starts
-      );
-      setWeather(res.data);
+      setWeather(response.data);
     } catch (error) {
-      console.error("Error fetching weather", error);
-      
-      // Retry once if it's a timeout or 500 error
-      if (retryCount === 0 && (error.code === 'ECONNABORTED' || error.response?.status === 500)) {
-        console.log('Retrying request...');
-        setTimeout(() => fetchWeather(1), 2000); // Retry after 2 seconds
-        return;
-      }
+      console.error("Error fetching weather:", error);
       
       if (error.code === 'ECONNABORTED') {
-        alert('Request timeout. The server might be starting up (this can take 30-60 seconds on free tier). Please try again in a moment.');
-      } else if (error.response?.status === 500) {
-        alert('Server error. The backend service might be restarting. Please try again in a minute.');
-      } else if (error.response?.status === 403) {
-        alert('CORS error. Backend is being updated, please try again in a minute.');
+        alert('Request timed out. Please try again.');
       } else if (error.response?.status === 404) {
         alert('City not found. Please check the spelling and try again.');
       } else {
-        alert(`Failed to fetch weather data: ${error.message}. Please try again.`);
+        alert('Failed to fetch weather data. Please try again later.');
       }
+      
       setWeather(null);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const getBackgroundClass = () => {
