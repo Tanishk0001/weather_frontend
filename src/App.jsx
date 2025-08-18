@@ -15,11 +15,19 @@ export default function App() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://weather-backend-vd2p.onrender.com/api/weather?city=${city}`
+        `https://weather-backend-vd2p.onrender.com/api/weather?city=${city}`,
+        { timeout: 10000 } // 10 second timeout
       );
       setWeather(res.data);
     } catch (error) {
       console.error("Error fetching weather", error);
+      if (error.code === 'ECONNABORTED') {
+        alert('Request timeout. The server might be starting up. Please try again in a moment.');
+      } else if (error.response?.status === 403) {
+        alert('CORS error. Backend is being updated, please try again in a minute.');
+      } else {
+        alert('Failed to fetch weather data. Please check the city name and try again.');
+      }
       setWeather(null);
     }
     setLoading(false);
@@ -69,10 +77,14 @@ export default function App() {
           />
           <button
             onClick={fetchWeather}
-            className="px-5 py-3 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-all"
+            disabled={loading || !city.trim()}
+            className="px-5 py-3 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             {loading ? (
-              <span className="animate-pulse">Loading...</span>
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                <span>Loading...</span>
+              </div>
             ) : (
               <>
                 <Search size={20} /> <span>Search</span>
