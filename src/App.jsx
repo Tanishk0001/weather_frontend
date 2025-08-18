@@ -10,24 +10,46 @@ export default function App() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchWeather = async () => {
+  const fetchWeather = async (retryCount = 0) => {
     if (!city) return;
     setLoading(true);
     try {
       const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://weather-backend-3-tlkd.onrender.com';
+      
+      // First, try to wake up the server with a health check
+      if (retryCount === 0) {
+        try {
+          await axios.get(`${API_BASE_URL}/actuator/health`, { timeout: 5000 });
+        } catch (healthError) {
+          console.log('Health check failed, server might be sleeping');
+        }
+      }
+      
       const res = await axios.get(
         `${API_BASE_URL}/api/weather?city=${city}`,
-        { timeout: 10000 } // 10 second timeout
+        { timeout: 30000 } // 30 second timeout for cold starts
       );
       setWeather(res.data);
     } catch (error) {
       console.error("Error fetching weather", error);
+      
+      // Retry once if it's a timeout or 500 error
+      if (retryCount === 0 && (error.code === 'ECONNABORTED' || error.response?.status === 500)) {
+        console.log('Retrying request...');
+        setTimeout(() => fetchWeather(1), 2000); // Retry after 2 seconds
+        return;
+      }
+      
       if (error.code === 'ECONNABORTED') {
-        alert('Request timeout. The server might be starting up. Please try again in a moment.');
+        alert('Request timeout. The server might be starting up (this can take 30-60 seconds on free tier). Please try again in a moment.');
+      } else if (error.response?.status === 500) {
+        alert('Server error. The backend service might be restarting. Please try again in a minute.');
       } else if (error.response?.status === 403) {
         alert('CORS error. Backend is being updated, please try again in a minute.');
+      } else if (error.response?.status === 404) {
+        alert('City not found. Please check the spelling and try again.');
       } else {
-        alert('Failed to fetch weather data. Please check the city name and try again.');
+        alert(`Failed to fetch weather data: ${error.message}. Please try again.`);
       }
       setWeather(null);
     }
