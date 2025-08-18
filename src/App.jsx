@@ -1,8 +1,8 @@
 "use client";
 import axios from "axios";
 import { useState } from "react";
-import WeatherCard from "./components/WeatherCard";
-import WeatherScene from "./components/WeatherScene";
+import WeatherCard from "./components/WeatherCard.jsx";
+import WeatherScene from "./components/WeatherScene.jsx";
 import { Search } from "lucide-react";
 
 export default function App() {
