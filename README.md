@@ -1,12 +1,12 @@
 # 🌤️ Live Weather App - Frontend
 
-A beautiful, responsive React weather application with 3D visualizations and real-time weather data.
+A beautiful, responsive React weather application with dynamic backgrounds and real-time weather data.
 
 ## ✨ Features
 
 - 🌍 **Global Weather Data** - Get weather for any city worldwide
 - 🎨 **Dynamic Backgrounds** - Background changes based on weather conditions
-- 🎯 **3D Weather Scenes** - Interactive 3D visualizations using Three.js
+- 🎯 **Interactive Weather Scenes** - Animated weather visualizations
 - 📱 **Responsive Design** - Works perfectly on all devices
 - ⚡ **Real-time Updates** - Live weather data from OpenWeatherMap API
 - 🎭 **Beautiful UI** - Modern design with Tailwind CSS
@@ -20,7 +20,6 @@ A beautiful, responsive React weather application with 3D visualizations and rea
 
 - **React 18** - Modern React with hooks
 - **Tailwind CSS** - Utility-first CSS framework
-- **Three.js** - 3D graphics and animations
 - **Axios** - HTTP client for API calls
 - **Lucide React** - Beautiful icons
 
@@ -34,8 +33,8 @@ A beautiful, responsive React weather application with 3D visualizations and rea
 
 1. **Clone the repository**:
    ```bash
-   git clone <your-repo-url>
-   cd weather-frontend
+   git clone https://github.com/Tanishk0001/weather_frontend.git
+   cd weather_frontend
    ```
 
 2. **Install dependencies**:
@@ -83,7 +82,8 @@ https://weather-backend-vd2p.onrender.com/api/weather?city={cityName}
 src/
 ├── components/
 │   ├── WeatherCard.jsx     # Weather data display
-│   └── WeatherScene.jsx    # 3D weather visualization
+│   ├── WeatherScene.jsx    # Animated weather visualization
+│   └── ErrorBoundary.jsx   # Error handling
 ├── App.jsx                 # Main application component
 ├── index.js               # React entry point
 └── index.css              # Global styles with Tailwind
@@ -92,7 +92,7 @@ src/
 ## 🌟 Weather Conditions Supported
 
 - ☀️ **Clear/Sunny** - Bright sun with golden background
-- ☁️ **Cloudy** - 3D cloud formations
+- ☁️ **Cloudy** - Animated cloud formations
 - 🌧️ **Rainy** - Animated raindrops
 - ❄️ **Snowy** - Falling snowflakes
 - 🌫️ **Default** - Beautiful gradient background
@@ -105,13 +105,13 @@ The app is pre-configured to work with the deployed backend. No additional confi
 
 - **Mobile**: Optimized for touch interactions
 - **Tablet**: Perfect layout for medium screens  
-- **Desktop**: Full 3D experience with all features
+- **Desktop**: Full experience with all features
 
 ## 🎨 Customization
 
 You can easily customize:
 - Colors in `tailwind.config.js`
-- 3D scenes in `WeatherScene.jsx`
+- Weather animations in `WeatherScene.jsx`
 - Weather card layout in `WeatherCard.jsx`
 
 ## 🚀 Status: ✅ DEPLOYMENT READY
