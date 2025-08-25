@@ -17,7 +17,7 @@ export default function App() {
       // Use local proxy server in development, or Render URL in production
       const API_BASE_URL = process.env.NODE_ENV === 'development' 
         ? 'http://localhost:3001' 
-        : 'https://weather-backend-3-tlkd.onrender.com';
+        : 'https://weather-backend-4-l6yr.onrender.com';
       
       const response = await axios.get(`${API_BASE_URL}/api/weather?city=${encodeURIComponent(city)}`, {
         timeout: 10000,
